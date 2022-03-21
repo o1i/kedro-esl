@@ -1,0 +1,80 @@
+# Here you can define all your data sets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://kedro.readthedocs.io/en/stable/05_data/01_data_catalog.html
+
+prostate_raw:
+    type: pandas.CSVDataSet
+    filepath: data/01_raw/hastie_prostate.csv
+    layer: raw
+
+x_all:
+    type: pandas.CSVDataSet
+    filepath: data/05_model_input/prostate_x_all.csv
+    layer: model_input
+x_test:
+    type: pandas.CSVDataSet
+    filepath: data/05_model_input/prostate_x_test.csv
+    layer: model_input
+x_train:
+    type: pandas.CSVDataSet
+    filepath: data/05_model_input/prostate_x_train.csv
+    layer: model_input
+y_all:
+    type: pandas.CSVDataSet
+    filepath: data/05_model_input/prostate_y_all.csv
+    layer: model_input
+y_test:
+    type: pandas.CSVDataSet
+    filepath: data/05_model_input/prostate_y_test.csv
+    layer: model_input
+y_train:
+    type: pandas.CSVDataSet
+    filepath: data/05_model_input/prostate_y_train.csv
+    layer: model_input
+
+x_standardiser:
+    type: pickle.PickleDataSet
+    filepath: data/06_models/prostate_x_standardiser.pkl
+    backend: pickle
+    layer: models
+
+linear_model:
+    type: pickle.PickleDataSet
+    filepath: data/06_models/prostate_linear_model.pkl
+    layer: models
+
+x_train_std:
+    type: pandas.CSVDataSet
+    filepath: data/07_model_output/x_train_std.csv
+    layer: model_output
+
+x_test_std:
+    type: pandas.CSVDataSet
+    filepath: data/07_model_output/x_test_std.csv
+    layer: model_output
+
+corr_x_all:
+    type: text.TextDataSet
+    filepath: data/08_reporting/corr_x_all.txt
+    layer: reporting
+
+corr_x_train:
+    type: text.TextDataSet
+    filepath: data/08_reporting/corr_x_train.txt
+    layer: reporting
+
+linear_model_fit:
+    type: pandas.CSVDataSet
+    filepath: data/08_reporting/linear_model_fit.csv
+    layer: reporting
+
+metrics:
+    type: tracking.MetricsDataSet
+    filepath: data/09_tracking/metrics.json
+
+hyperparameters:
+    type: tracking.JSONDataSet
+    filepath: data/09_tracking/hyper_params.json
+
+    
