@@ -8,7 +8,7 @@ import numpy as np
 from numpy.linalg import solve
 import pandas as pd
 from scipy.linalg import qr
-from scipy.stats import t
+from scipy.stats import t, norm, f
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
 import statsmodels.api as sm
@@ -49,6 +49,7 @@ def manual_regression(df: pd.DataFrame, y: pd.Series, params: dict) -> str:
     pred = np.matmul(used.values, coefs).reshape([-1])
     resid = y.values.reshape([-1]) - pred
     sig2_hat = np.matmul(resid.T, resid) / (n - p)
+    sig_hat = np.sqrt(sig2_hat)
     std_err = np.sqrt(np.diag(np.linalg.inv(np.matmul(R[:p, :].T, R[:p, :]))) * sig2_hat)
     T = coefs / std_err
     P = 2*(1-t.cdf(np.abs(T), df = n - p))
@@ -64,7 +65,22 @@ def manual_regression(df: pd.DataFrame, y: pd.Series, params: dict) -> str:
         }, index=used.columns), headers="keys")
     r2 = np.sum(np.square(pred - np.mean(pred))) / np.sum(np.square(y.values - np.mean(y.values)))
     r2a = 1 - (1-r2) * (n - 1) / (n - p)
-    out = f"n: {n}\np + 1: {p}\nsig2_hat: {sig2_hat}\n\nR2: {r2}\nAdj R2: {r2a}\n\n{ols_summary}"
+    F = (r2 / (p - 1)) / ((1 - r2) / (n - p))
+    FP = 1-f.cdf(F, p-1, n-p)
+    ll = np.sum(norm.logpdf(resid / sig_hat))
+    AIC = 2 * p - 2 * ll
+    BIC = p * np.log(n) - 2 * ll
+    out = (f"n: {n}\n"
+           f"p + 1: {p}\n"
+           f"sig2_hat: {sig2_hat}"
+           f"\n\nR2: {r2}\n"
+           f"Adj R2: {r2a}\n"
+           f"F: {F}\n"
+           f"F prob: {FP}\n"
+           f"Log-Likelihood: {ll}\n"
+           f"AIC: {AIC}\n"
+           f"BIC: {BIC}\n"
+           f"\n\n{ols_summary}")
     return out
 
 
