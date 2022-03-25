@@ -64,17 +64,25 @@ corr_x_train:
     filepath: data/08_reporting/corr_x_train.txt
     layer: reporting
 
-linear_model_fit:
-    type: pandas.CSVDataSet
-    filepath: data/08_reporting/linear_model_fit.csv
-    layer: reporting
-
 metrics:
     type: tracking.MetricsDataSet
     filepath: data/09_tracking/metrics.json
+
+summary:
+    type: text.TextDataSet
+    filepath: data/08_reporting/summary.txt
+
+manual_summary:
+    type: text.TextDataSet
+    filepath: data/08_reporting/manual_summary.txt
+
+
 
 hyperparameters:
     type: tracking.JSONDataSet
     filepath: data/09_tracking/hyper_params.json
 
+string_outputs:
+    type: tracking.JSONDataSet
+    filepath: data/09_tracking/string_outputs.json
     
